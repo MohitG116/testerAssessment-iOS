@@ -31,6 +31,6 @@ class CurrencyHelperTests: XCTestCase {
         XCTAssertEqual(result, "€ 122,50")
     }
     
-    // New Test Cases >>
+    // New Test Cases here >>
 }
 
