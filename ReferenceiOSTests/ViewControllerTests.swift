@@ -7,30 +7,107 @@
 //
 
 import XCTest
+import Foundation
+@testable import ReferenceiOS
 
-final class ViewControllerTests: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+class ViewControllerTests: XCTestCase {
+    
+    var VC: ViewController!
+    var minCurrency: CGFloat = 100
+    var maxCurrency: CGFloat = 99999999
+    
+    override func setUp() {
+        super.setUp()
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        VC = storyboard.instantiateViewController(withIdentifier: "ViewController") as? ViewController
+        VC.loadViewIfNeeded()
+    }
+    
+    override func tearDown() {
+        VC = nil
+        super.tearDown()
     }
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    // MARK: - Test Cases
+    
+    // TODO: - Test currency label Text changed
+    func testBoundryCurrency() {
+        // Given
+        let defaultText = "Hello"
+        
+        // When
+        VC.generate(VC.button)
+        
+        // Then
+        let currencyLabel = VC.label.text
+        XCTAssertNotEqual(currencyLabel, defaultText, "Currency label text is still Hello")
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    
+    // TODO: - Test Boundary Currency Number range
+    /// Ensures that a function retuerns a valid random number in expected range
+    func testValidCurrencyInRange() {
+        
+        // When
+        VC.generate(VC.button)
+        let currencyLabel = VC.label.text
+        let generatedCurrency: NSNumber? = currencyLabel?.numberfromString()
+                
+        // Then
+        XCTAssertGreaterThanOrEqual(generatedCurrency as! CGFloat, minCurrency, "Generated Number is less than Min value.")
+        XCTAssertLessThanOrEqual(generatedCurrency as! CGFloat, maxCurrency, "Generated Number is greater than Max value.")
     }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    
+    // TODO: - Test Currency Number range
+    /// Test calling the funciton repeatedly 1000 times
+    /// ensuring it always generates a number within the range
+    func testRepeatedlyCurrencyInRange() {
+        
+        // When
+        for _ in 1...1000 {
+            VC.generate(VC.button)
+            let currencyLabel = VC.label.text
+            let generatedCurrency: NSNumber? = currencyLabel?.numberfromString()
+                    
+            // Then
+            XCTAssertGreaterThanOrEqual(generatedCurrency as! CGFloat, minCurrency, "Generated Number is less than Min value.")
+            XCTAssertLessThanOrEqual(generatedCurrency as! CGFloat, maxCurrency, "Generated Number is greater than Max value.")
         }
     }
-
+   
+    // TODO: - Test generation of formatted currency
+    /// Test calling the funciton repeatedly 1000 times
+    /// ensuring it always generates a number within the range
+    func testIsGeneratedAmountFormatted() {
+        // Given
+        let currencyRegex = "^(€\\s)(?!0\\d)\\d{1,3}(?:\\.\\d{3})*,\\d{2}$"
+        
+        // When
+        VC.generate(VC.button)
+        let currencyLabelString = VC.label.text
+        let isMatch: Bool = ((currencyLabelString?.matches(currencyRegex)) != nil)
+        
+        // Then
+        XCTAssertTrue(isMatch, "Generated currency is not in nl_NL currency format.")
+    }
+    
+    // TODO: - Test Performance of Currency Generation Method
+    /// Try ececuting the function 100000 time
+    /// Check completion time, if it fail
+    /// Avg completion time is ~6.1 Sec ✅
+    func testPerformance () {
+        measure {
+            for _ in 1...100000 {
+                VC.generate(VC.button)
+            }
+        }
+    }
+    
+    // TODO: -
+    func testGenerateButtonTapped() {
+        let currencyRegex = "^(€\\s)(?!0\\d)\\d{1,3}(?:\\.\\d{3})*,\\d{2}$"
+        VC.generate(VC.button)
+        
+        XCTAssertTrue(((VC.label.text?.matches(currencyRegex)) != nil))
+    }
+    
 }

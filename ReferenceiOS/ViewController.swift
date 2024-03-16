@@ -19,7 +19,7 @@ class ViewController: UIViewController {
 
     @IBAction func generate(_ sender: Any) {
         // Generate amount
-        let amount = Float.random(in: 100 ..< 99999999)
+        let amount = CGFloat.random(in: 100 ..< 99999999)
 
         // Format
         if let formattedAmount = CurrencyHelper.format(amount: amount as NSNumber) {

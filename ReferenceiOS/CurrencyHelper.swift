@@ -15,10 +15,11 @@ class CurrencyHelper {
     static let decimalCount = 2
 
     static func format(amount: NSNumber) -> String? {
-        let formatter = NumberFormatter()
-        formatter.locale = Locale(identifier: "nl_NL")
-        formatter.numberStyle = .currency
-        return formatter.string(from: amount)
+            let formatter = NumberFormatter()
+            formatter.locale = Locale(identifier: "nl_NL")
+            formatter.numberStyle = .currency
+            
+            return formatter.string(from: amount)
     }
     
     static func attributify(amount: String) -> NSMutableAttributedString {
