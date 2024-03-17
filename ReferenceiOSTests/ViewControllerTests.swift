@@ -27,37 +27,41 @@ class ViewControllerTests: XCTestCase {
         VC = nil
         super.tearDown()
     }
-
+    
     // MARK: - Test Cases
     
-    // TODO: - Test currency label Text changed
-    func testBoundryCurrency() {
+    // TODO: Test Currency label Text changed
+    /// Check if Label default value is changed
+    /// from "Hello" to any generated currency value
+    func testLabelTextChanged() {
         // Given
         let defaultText = "Hello"
         
         // When
         VC.generate(VC.button)
+        let currencyLabel = VC.label.text
         
         // Then
-        let currencyLabel = VC.label.text
-        XCTAssertNotEqual(currencyLabel, defaultText, "Currency label text is still Hello")
+        XCTAssertNotEqual(currencyLabel, defaultText, "Currency label text not updated from \'Hello\' to generated currency.")
     }
     
-    // TODO: - Test Boundary Currency Number range
-    /// Ensures that a function retuerns a valid random number in expected range
-    func testValidCurrencyInRange() {
+    // TODO: Test Generated Currency is within the range
+    /// Ensures that a function retuerns a valid random number
+    /// between 100 & 99999999
+    /// Testing for a single generated Currency Value
+    func testCurrencyInRange() {
         
         // When
         VC.generate(VC.button)
         let currencyLabel = VC.label.text
-        let generatedCurrency: NSNumber? = currencyLabel?.numberfromString()
-                
+        let generatedCurrency: CGFloat? = currencyLabel?.numberfromString()
+        
         // Then
-        XCTAssertGreaterThanOrEqual(generatedCurrency as! CGFloat, minCurrency, "Generated Number is less than Min value.")
-        XCTAssertLessThanOrEqual(generatedCurrency as! CGFloat, maxCurrency, "Generated Number is greater than Max value.")
+        XCTAssertGreaterThanOrEqual(generatedCurrency ?? 0.0, minCurrency, "Generated Number is less than Min value.")
+        XCTAssertLessThanOrEqual(generatedCurrency ?? 0.0, maxCurrency, "Generated Number is greater than Max value.")
     }
     
-    // TODO: - Test Currency Number range
+    // TODO: Test Generated Currency is within the range repeteadly
     /// Test calling the funciton repeatedly 1000 times
     /// ensuring it always generates a number within the range
     func testRepeatedlyCurrencyInRange() {
@@ -66,17 +70,41 @@ class ViewControllerTests: XCTestCase {
         for _ in 1...1000 {
             VC.generate(VC.button)
             let currencyLabel = VC.label.text
-            let generatedCurrency: NSNumber? = currencyLabel?.numberfromString()
-                    
+            let generatedCurrency = currencyLabel?.numberfromString()
+            
             // Then
-            XCTAssertGreaterThanOrEqual(generatedCurrency as! CGFloat, minCurrency, "Generated Number is less than Min value.")
-            XCTAssertLessThanOrEqual(generatedCurrency as! CGFloat, maxCurrency, "Generated Number is greater than Max value.")
+            XCTAssertGreaterThanOrEqual(generatedCurrency ?? 0.0, minCurrency, "Generated Number is less than Min value.")
+            XCTAssertLessThanOrEqual(generatedCurrency ?? 0.0, maxCurrency, "Generated Number is greater than Max value.")
         }
     }
-   
-    // TODO: - Test generation of formatted currency
+    
+    // MARK: - Testing Boundary Condition
+    // TODO: Test Generated Currency Boundary Condition
     /// Test calling the funciton repeatedly 1000 times
-    /// ensuring it always generates a number within the range
+    /// Ensuring it never generates a number outside of the boundary
+    func testBoundaryValues() {
+        // Given
+        var counts = [CGFloat]()
+        let iterations = 1000
+        
+        // When
+        for _ in 0...iterations {
+            VC.generate(VC.button)
+            let currencyLabel = VC.label.text
+            let generatedCurrency = currencyLabel?.numberfromString()
+            
+            counts.append(generatedCurrency ?? 0.0)
+        }
+        
+        // Then
+        XCTAssertFalse(counts.contains(minCurrency - 1), "Generated Number is less than lower boundary.")
+        XCTAssertFalse(counts.contains(maxCurrency + 1), "Generated Number is greater than upper boundary.")
+    }
+    
+    // TODO: - Test generation of formatted currency
+    /// Test if generated currency is formated as expected
+    /// Currency should contain '€' symbol followed by space
+    /// Follow the currency seperator as per given Locale [nl_NL]
     func testIsGeneratedAmountFormatted() {
         // Given
         let currencyRegex = "^(€\\s)(?!0\\d)\\d{1,3}(?:\\.\\d{3})*,\\d{2}$"
@@ -87,7 +115,7 @@ class ViewControllerTests: XCTestCase {
         let isMatch: Bool = ((currencyLabelString?.matches(currencyRegex)) != nil)
         
         // Then
-        XCTAssertTrue(isMatch, "Generated currency is not in nl_NL currency format.")
+        XCTAssertTrue(isMatch, "Generated currency is not in \'nl_NL\' currency format.")
     }
     
     // TODO: - Test Performance of Currency Generation Method
@@ -101,13 +129,4 @@ class ViewControllerTests: XCTestCase {
             }
         }
     }
-    
-    // TODO: -
-    func testGenerateButtonTapped() {
-        let currencyRegex = "^(€\\s)(?!0\\d)\\d{1,3}(?:\\.\\d{3})*,\\d{2}$"
-        VC.generate(VC.button)
-        
-        XCTAssertTrue(((VC.label.text?.matches(currencyRegex)) != nil))
-    }
-    
 }

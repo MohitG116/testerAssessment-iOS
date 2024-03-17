@@ -10,13 +10,13 @@ import Foundation
 
 extension String {
     
-    func numberfromString() -> NSNumber? {
+    func numberfromString() -> CGFloat? {
         let formatter = NumberFormatter()
         formatter.locale = Locale(identifier: "nl_NL")
         formatter.numberStyle = .currency
         formatter.maximumFractionDigits = 2
         
-        return formatter.number(from: self) ?? 0.0
+        return (formatter.number(from: self) as? CGFloat)
     }
     
     func matches(_ regex: String) -> Bool {

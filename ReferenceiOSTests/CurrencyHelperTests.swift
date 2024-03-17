@@ -82,7 +82,7 @@ class CurrencyHelperTests: XCTestCase {
         
         formatter.string(from: number)
         
-            
+        
         // Act (When)
         let result: String = CurrencyHelper.format(amount: number) ?? ""
         let currencyString: String = result.currencyWithoutSymbol()
@@ -104,7 +104,7 @@ class CurrencyHelperTests: XCTestCase {
         let startRange = 0
         let centRange = 2
         let euroRange = (attributedString.length - centRange)
-
+        
         // Check if the attributed string has the correct attributes
         attributedString.enumerateAttributes(in: NSRange(location: startRange, length: attributedString.length), options: []) { (attributes, range, _) in
             

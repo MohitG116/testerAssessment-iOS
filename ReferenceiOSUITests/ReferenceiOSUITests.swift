@@ -24,11 +24,11 @@ class ReferenceiOSUITests: XCTestCase {
     
     override func tearDown() {
         super.tearDown()
-
+        
         app.terminate()
         app = nil
     }
-
+    
     // MARK: - Test Cases for UI
     
     // TODO: - test is Label Available on UI
