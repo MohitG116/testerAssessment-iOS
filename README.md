@@ -5,7 +5,7 @@
 
 <p id="description">Test assessment for Native iOS Mobile application to test Automation</p>
 
-<h2>🍰 Contribution Guidelines:</h2>
+<h2>✅ Highlights:</h2>
 
   
   
@@ -15,3 +15,4 @@ Technologies used in the project:
 
 *   Swift
 *   XCTest
+*   XCode
