@@ -120,12 +120,3 @@ class CurrencyHelperTests: XCTestCase {
     }
     
 }
-
-extension String {
-    func currencyWithoutSymbol() -> String {
-        let valueString = self.filter {
-            CharacterSet(charactersIn: "0123456789.,").isSuperset(of: CharacterSet(charactersIn: String($0)))
-        }.trimmingCharacters(in: .whitespacesAndNewlines)
-        return valueString
-    }
-}
