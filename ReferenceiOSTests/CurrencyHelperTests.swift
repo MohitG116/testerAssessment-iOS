@@ -42,7 +42,7 @@ class CurrencyHelperTests: XCTestCase {
         let result = CurrencyHelper.format(amount: number)
         
         // Assert (Then)
-        XCTAssertEqual(result, "€ 1.234.567.890,12", "Couldn't format properly")
+        XCTAssertEqual(result, "€ 1.234.567.890,12", Constants.TestFailMessages.currencyNotInFormat)
     }
     
     // TODO: - Test for small number
@@ -54,7 +54,7 @@ class CurrencyHelperTests: XCTestCase {
         let result = CurrencyHelper.format(amount: number)
         
         // Assert (Then)
-        XCTAssertEqual(result, "€ 0,01")
+        XCTAssertEqual(result, "€ 0,01", Constants.TestFailMessages.currencyNotInFormat)
     }
     
     // Extra test cases considering if input type is textBox insead of number generating randomly
@@ -67,7 +67,7 @@ class CurrencyHelperTests: XCTestCase {
         let result = CurrencyHelper.format(amount: number)
         
         // Assert (Then)
-        XCTAssertEqual(result, "€ -10,00", "invalid input, currency shouldn't be a negative number")
+        XCTAssertEqual(result, "€ -10,00", Constants.TestFailMessages.invalidNegativeInput)
     }
     
     // TODO: - Test for invalid number
@@ -109,12 +109,12 @@ class CurrencyHelperTests: XCTestCase {
         attributedString.enumerateAttributes(in: NSRange(location: startRange, length: attributedString.length), options: []) { (attributes, range, _) in
             
             if range.location < euroRange {
-                XCTAssertEqual(attributes[.font] as? UIFont, UIFont(name: "Helvetica", size: 18), "Regular font size should be Helvetica - 18.0")
+                XCTAssertEqual(attributes[.font] as? UIFont, UIFont(name: "Helvetica", size: 18), Constants.TestFailMessages.incorrectSuperscriptFont)
             }
             
             if range.location >= euroRange {
-                XCTAssertEqual(attributes[.baselineOffset] as? CGFloat, 3.0, "Superscript font baseline 3")
-                XCTAssertEqual(attributes[.font] as? UIFont, UIFont(name: "Helvetica", size: 13), "Superscript font should be Helvetica - 13.0")
+                XCTAssertEqual(attributes[.baselineOffset] as? CGFloat, 3.0, Constants.TestFailMessages.incorrectSuperscriptBaseline)
+                XCTAssertEqual(attributes[.font] as? UIFont, UIFont(name: "Helvetica", size: 13), Constants.TestFailMessages.incorrectSuperscriptFont)
             }
         }
     }
