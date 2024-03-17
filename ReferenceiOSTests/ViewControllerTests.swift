@@ -42,7 +42,7 @@ class ViewControllerTests: XCTestCase {
         let currencyLabel = VC.label.text
         
         // Then
-        XCTAssertNotEqual(currencyLabel, defaultText, "Currency label text not updated from \'Hello\' to generated currency.")
+        XCTAssertNotEqual(currencyLabel, defaultText, Constants.TestFailMessages.labelTextNotChanged)
     }
     
     // TODO: Test Generated Currency is within the range
@@ -57,8 +57,8 @@ class ViewControllerTests: XCTestCase {
         let generatedCurrency: CGFloat? = currencyLabel?.numberfromString()
         
         // Then
-        XCTAssertGreaterThanOrEqual(generatedCurrency ?? 0.0, minCurrency, "Generated Number is less than Min value.")
-        XCTAssertLessThanOrEqual(generatedCurrency ?? 0.0, maxCurrency, "Generated Number is greater than Max value.")
+        XCTAssertGreaterThanOrEqual(generatedCurrency ?? 0.0, minCurrency, Constants.TestFailMessages.belowRange)
+        XCTAssertLessThanOrEqual(generatedCurrency ?? 0.0, maxCurrency, Constants.TestFailMessages.beyondRange)
     }
     
     // TODO: Test Generated Currency is within the range repeteadly
@@ -73,8 +73,8 @@ class ViewControllerTests: XCTestCase {
             let generatedCurrency = currencyLabel?.numberfromString()
             
             // Then
-            XCTAssertGreaterThanOrEqual(generatedCurrency ?? 0.0, minCurrency, "Generated Number is less than Min value.")
-            XCTAssertLessThanOrEqual(generatedCurrency ?? 0.0, maxCurrency, "Generated Number is greater than Max value.")
+            XCTAssertGreaterThanOrEqual(generatedCurrency ?? 0.0, minCurrency, Constants.TestFailMessages.belowRange)
+            XCTAssertLessThanOrEqual(generatedCurrency ?? 0.0, maxCurrency, Constants.TestFailMessages.beyondRange)
         }
     }
     
@@ -97,8 +97,8 @@ class ViewControllerTests: XCTestCase {
         }
         
         // Then
-        XCTAssertFalse(counts.contains(minCurrency - 1), "Generated Number is less than lower boundary.")
-        XCTAssertFalse(counts.contains(maxCurrency + 1), "Generated Number is greater than upper boundary.")
+        XCTAssertFalse(counts.contains(minCurrency - 1), Constants.TestFailMessages.belowBoundry)
+        XCTAssertFalse(counts.contains(maxCurrency + 1), Constants.TestFailMessages.beyondBoundry)
     }
     
     // TODO: - Test generation of formatted currency
@@ -115,7 +115,7 @@ class ViewControllerTests: XCTestCase {
         let isMatch: Bool = ((currencyLabelString?.matches(currencyRegex)) != nil)
         
         // Then
-        XCTAssertTrue(isMatch, "Generated currency is not in \'nl_NL\' currency format.")
+        XCTAssertTrue(isMatch, Constants.TestFailMessages.currencyNotInFormat)
     }
     
     // TODO: - Test Performance of Currency Generation Method
