@@ -43,7 +43,7 @@ class ReferenceiOSUITests: XCTestCase {
         debugPrint("Currency Label Text is: \(currencyLabelText)")
         
         // Assert
-        XCTAssertTrue(currencyLabel.exists, "Could not find the label to display the currency")
+        XCTAssertTrue(currencyLabel.exists, Constants.TestFailMessages.labelMissing)
     }
     
     // TODO: Test if label content is properly visible
@@ -65,7 +65,7 @@ class ReferenceiOSUITests: XCTestCase {
         let relativeLabelFrame = CGRect(x: labelFrame.minX - parentFrame.minX, y: labelFrame.minY - parentFrame.minY, width: labelFrame.width, height: labelFrame.height)
         
         // Assert
-        XCTAssertTrue(relativeLabelFrame.width <= parentFrame.width, "Label content width is larger than device view.")
+        XCTAssertTrue(relativeLabelFrame.width <= parentFrame.width, Constants.TestFailMessages.labelWidthOverflow)
     }
     
     // TODO: Test is Button Available on UI
@@ -76,7 +76,7 @@ class ReferenceiOSUITests: XCTestCase {
         let button = app.buttons[buttonIdentifier]
         
         // Assert
-        XCTAssertEqual(button.exists, true, "Could not find the button to generate the currency")
+        XCTAssertEqual(button.exists, true, Constants.TestFailMessages.buttonMissing)
     }
     
     // TODO: - Test is Button Clickable on UI
@@ -86,8 +86,8 @@ class ReferenceiOSUITests: XCTestCase {
     func testButtonClickable() {
         let button = app.buttons[buttonIdentifier]
         
-        XCTAssertTrue(button.isEnabled, "Generate currency button is not enabled.")
-        XCTAssertEqual(button.isHittable, true, "Generate currency button is not clickable.")
+        XCTAssertTrue(button.isEnabled, Constants.TestFailMessages.buttonNotEnabled)
+        XCTAssertEqual(button.isHittable, true, Constants.TestFailMessages.buttonNotClickable)
     }
     
     // TODO: Test Currency Label value is assigned
@@ -104,7 +104,7 @@ class ReferenceiOSUITests: XCTestCase {
         let updatedText = currencyLabel.label // Currency
         
         // Than
-        XCTAssertFalse(initialText == updatedText, "Currency label value not changed on generate button click.")
+        XCTAssertFalse(initialText == updatedText, Constants.TestFailMessages.labelValueNotChanged)
     }
     
     
@@ -122,10 +122,10 @@ class ReferenceiOSUITests: XCTestCase {
         let currencyLabelText = currencyLabel.label
         
         // Then
-        XCTAssertTrue(currencyLabelText.contains("€"), "\'nl_NL\' currency symbol is missing.")
-        XCTAssertTrue(currencyLabelText.contains(","), "Fraction Digits are missing as per \'nl_NL\' currency format.")
+        XCTAssertTrue(currencyLabelText.contains("€"), Constants.TestFailMessages.euroSymbolMissing)
+        XCTAssertTrue(currencyLabelText.contains(","), Constants.TestFailMessages.fractionDigitsMissing)
         let currencyComponents = currencyLabelText.components(separatedBy: ",")
-        XCTAssertEqual(currencyComponents[1].count, 2, "Incorrect fraction digits.")
+        XCTAssertEqual(currencyComponents[1].count, 2, Constants.TestFailMessages.wrongFractionDigitsCount)
     }
     
 }
