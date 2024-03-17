@@ -12,6 +12,10 @@ import UIKit
 
 struct Constants {
     
+    enum AttributifyError: Error {
+        case emptyString
+    }
+    
     struct TestFailMessages {
         // ViewControllerTests >>>>>>>
         static let labelTextNotChanged = "Currency label text not updated from \'Hello\' to generated currency."

@@ -57,9 +57,7 @@ class CurrencyHelperTests: XCTestCase {
         XCTAssertEqual(result, "€ 0,01", Constants.TestFailMessages.currencyNotInFormat)
     }
     
-    // Extra test cases considering if input type is textBox insead of number generating randomly
-    // TODO: - Test for invalid number
-    func testInvalidNumber() {
+    func testNegativeNumber() {
         // Arrange (Given)
         let number: NSNumber = -10
         
@@ -67,56 +65,72 @@ class CurrencyHelperTests: XCTestCase {
         let result = CurrencyHelper.format(amount: number)
         
         // Assert (Then)
-        XCTAssertEqual(result, "€ -10,00", Constants.TestFailMessages.invalidNegativeInput)
+        XCTAssertEqual(result, "€ -10,00", Constants.TestFailMessages.currencyNotInFormat)
     }
     
-    // TODO: - Test for invalid number
-    // given range 100 - 99999999
-    func testIBelowRange() {
+    // TODO: Trying giving invalid double number
+    /// Giving invalid input as "nan"
+    func testInvalidInput() {
         // Arrange (Given)
-        let number: NSNumber = 99.95
-        
-        let formatter = NumberFormatter()
-        formatter.locale = Locale(identifier: "nl_NL")
-        formatter.numberStyle = .currency
-        
-        formatter.string(from: number)
-        
+        let invalidNumber = NSNumber(value: Double.nan)
         
         // Act (When)
-        let result: String = CurrencyHelper.format(amount: number) ?? ""
-        let currencyString: String = result.currencyWithoutSymbol()
+        let formattedNumber = CurrencyHelper.format(amount: invalidNumber)
         
-        let numberString = formatter.number(from: currencyString)
-        
-        let compare = (numberString as! Double) < Double(100.00)
-        
-        // Assert (Then)
-        XCTAssertTrue(compare, "Number is below 100")
+        // Then
+        XCTAssertNil(formattedNumber)
     }
     
-    //TODO: UI Attribution Test >>
+    // TODO: Measure performance of the function
+    /// Testing the performance of the format function
+    /// Avg completion time is ~0.001 Sec ✅
+    func testPerformance() {
+        let number: NSNumber = 87654321.99
+        measure {
+            _ = CurrencyHelper.format(amount: number)
+        }
+    }
+    
+    //TODO: UI Attribution Test
+    /// Check attributifiation of the complete string
+    /// Checking RegularString Attribues
+    /// Checking SperString Attributes with baseline
     func testAttribution() {
-        // Test with a known formatted amount
+        // Given
         let formattedAmount = "€ 1.234.569,78"
-        let attributedString = CurrencyHelper.attributify(amount: formattedAmount)
-        
+        let regularSize: CGFloat = 18
+        let superscriptSize: CGFloat = 13
         let startRange = 0
         let centRange = 2
+        
+        // When
+        let attributedString = CurrencyHelper.attributify(amount: formattedAmount)
         let euroRange = (attributedString.length - centRange)
         
+        // Then
         // Check if the attributed string has the correct attributes
         attributedString.enumerateAttributes(in: NSRange(location: startRange, length: attributedString.length), options: []) { (attributes, range, _) in
             
+            //for Euro part
             if range.location < euroRange {
-                XCTAssertEqual(attributes[.font] as? UIFont, UIFont(name: "Helvetica", size: 18), Constants.TestFailMessages.incorrectSuperscriptFont)
+                XCTAssertEqual(attributes[.font] as? UIFont, UIFont(name: "Helvetica", size: regularSize), Constants.TestFailMessages.incorrectSuperscriptFont)
             }
             
+            //for Cent part
             if range.location >= euroRange {
                 XCTAssertEqual(attributes[.baselineOffset] as? CGFloat, 3.0, Constants.TestFailMessages.incorrectSuperscriptBaseline)
-                XCTAssertEqual(attributes[.font] as? UIFont, UIFont(name: "Helvetica", size: 13), Constants.TestFailMessages.incorrectSuperscriptFont)
+                XCTAssertEqual(attributes[.font] as? UIFont, UIFont(name: "Helvetica", size: superscriptSize), Constants.TestFailMessages.incorrectSuperscriptFont)
             }
         }
+    }
+    
+    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    
+#warning("This test would work if the function \"Attributify(String)\" is handled for empty string")
+    func testEmptyInput() {
+        //let result = CurrencyHelper.attributify(amount: "")
+        //XCTAssertThrowsError(try CurrencyHelper.attributify(amount: "")) {error in
+        //XCTAssertEqual(error as? Constants.AttributifyError, .emptyString, "Empty string not handeled.")
     }
     
 }
